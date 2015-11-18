@@ -316,3 +316,4 @@
 
   window.Resizer = Resizer;
 })();
+
