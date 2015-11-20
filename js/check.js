@@ -6,13 +6,11 @@ function getMessage(a, b) {
   var DataTypeNamber = 'number';
   var DataTypeObject = 'object';
 
-  //условие - первый аргумент имеет тип boolean и он true
-  if (typeof a == DataTypeBoolean && a == true ) {
+  //условие - первый аргумент имеет тип boolean
+  if (a == true){
     var message = 'Переданное GIF-изображение анимировано и содержит ' + b + ' кадров';
   }
-
-  //условие - первый аргумент имеет тип boolean и он false
-  else if (typeof a == DataTypeBoolean && a == false){
+  else if (a == false){
     var message = 'Переданное GIF-изображение не анимировано';
   }
 
