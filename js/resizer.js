@@ -50,6 +50,12 @@
     this._onDrag = this._onDrag.bind(this);
   };
 
+
+
+
+
+
+
   Resizer.prototype = {
     /**
      * Родительский элемент канваса.
@@ -110,7 +116,7 @@
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
-
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
@@ -119,6 +125,32 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+      this._ctx.fillRect(
+          -this._container.width/2,
+          -this._container.height/2-this._ctx.lineWidth,
+          this._container.width,
+          (this._container.height-this._resizeConstraint.side) / 2);
+
+      this._ctx.fillRect(
+          -this._container.width/2,
+          this._resizeConstraint.side / 2-this._ctx.lineWidth / 2,
+          this._container.width,
+          this._container.height);
+
+      this._ctx.fillRect(
+          this._resizeConstraint.side/ 2-this._ctx.lineWidth/2,
+          -this._resizeConstraint.side/ 2-this._ctx.lineWidth,
+          this._container.width,
+          this._resizeConstraint.side+this._ctx.lineWidth/2);
+
+      this._ctx.fillRect(
+        -this._container.width/2,
+        -this._resizeConstraint.side/ 2-this._ctx.lineWidth,
+        (this._container.width-this._resizeConstraint.side) / 2-this._ctx.lineWidth,
+        this._resizeConstraint.side+this._ctx.lineWidth-this._ctx.lineWidth/2);
+
+
+
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
@@ -126,7 +158,32 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
+
+     function drawLine(start, length, fillStyle) {
+        // Сохраним старое значение this._ctx.fillStyle
+        var oldFillStyle = 'rgba(0, 0, 0, 0.8)';
+        this._ctx.fillStyle = fillStyle;
+        var y = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
+
+        for (var x = start; x < start + length; x += 10) {
+          this._ctx.arc(x, y, 4, 0, 2 * Math.PI);
+          this._ctx.fill();
+        }
+        // Вернем старое значение this._ctx.fillStyle, которое мы сохраняли ранее
+        this._ctx.fillStyle = oldFillStyle;
+      };
+
+      drawLine(
+        -((this._container.width - this._resizeConstraint.side) / 2),
+        this._resizeConstraint.side,
+        '#ffe753');
+
+
     },
+
+
+
+
 
     /**
      * Включение режима перемещения. Запоминается текущее положение курсора,
