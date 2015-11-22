@@ -116,7 +116,7 @@
       // нужно отрисовать и координаты его верхнего левого угла.
       // Координаты задаются от центра холста.
       this._ctx.drawImage(this._image, displX, displY);
-      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
       this._ctx.strokeRect(
@@ -125,32 +125,118 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
-      this._ctx.fillRect(
-          -this._container.width/2,
-          -this._container.height/2-this._ctx.lineWidth,
-          this._container.width,
-          (this._container.height-this._resizeConstraint.side) / 2);
 
+      /**
+       * Отрисовка маски, прозрачностью 80% вокруг желтой рамки,
+       */
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+      //верхний четырехугольник
       this._ctx.fillRect(
-          -this._container.width/2,
+          -this._container.width / 2,
+          -this._container.height / 2 - this._ctx.lineWidth,
+          this._container.width,
+          (this._container.height - this._resizeConstraint.side) / 2);
+
+      //нижний четырехугольник
+      this._ctx.fillRect(
+          -this._container.width /2,
           this._resizeConstraint.side / 2-this._ctx.lineWidth / 2,
           this._container.width,
           this._container.height);
 
+      //правый четырехугольник
       this._ctx.fillRect(
-          this._resizeConstraint.side/ 2-this._ctx.lineWidth/2,
-          -this._resizeConstraint.side/ 2-this._ctx.lineWidth,
+          this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+          -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
           this._container.width,
-          this._resizeConstraint.side+this._ctx.lineWidth/2);
+          this._resizeConstraint.side + this._ctx.lineWidth / 2);
 
+      //левый четырехугольник
       this._ctx.fillRect(
-        -this._container.width/2,
-        -this._resizeConstraint.side/ 2-this._ctx.lineWidth,
-        (this._container.width-this._resizeConstraint.side) / 2-this._ctx.lineWidth,
-        this._resizeConstraint.side+this._ctx.lineWidth-this._ctx.lineWidth/2);
+        -this._container.width /2 ,
+        -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+        (this._container.width - this._resizeConstraint.side) / 2 - this._ctx.lineWidth,
+        this._resizeConstraint.side + this._ctx.lineWidth/2);
+
+      /**
+       * вывод размеров кадрируемого изображения
+       */
+      var SizeText = this._image.naturalWidth + ' х ' + this._image.naturalHeight;
+      var SizeTextX = 0;
+      var SizeTextY = -this._resizeConstraint.side / 2-this._ctx.lineWidth;
+
+      //стили текста
+      this._ctx.fillStyle = '#fff';
+      this._ctx.font = 'normal 16px Arial';
+      this._ctx.textBaseline = 'bottom';
+      this._ctx.textAlign = 'center';
+      this._ctx.fillText(SizeText, SizeTextX, SizeTextY);
+
+      /**
+       * пунктирная рамка- обводка для картинки
+       */
+      this._ctx.fillStyle = '#ccc';
+      var lengthLine = this._resizeConstraint.side;
+
+      //пунктирная рамка- обводка - верхняя линия
+      var LineFirstStartX = -this._resizeConstraint.side / 2;
+      var LineFirstY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth/2;
+
+      this._ctx.beginPath();
+      for (var i = LineFirstStartX; i <= LineFirstStartX + lengthLine; i += 10 ) {
+        this._ctx.arc(i, LineFirstY, 3, 0, Math.PI *2);
+        this._ctx.fill();
+      }
 
 
+      //пунктирная рамка- обводка - правая линия
+      var LineTwoX = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+      var LineTwoStartY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2 ;
 
+       this._ctx.beginPath();
+      for (var i = LineTwoStartY; i <= LineTwoStartY + lengthLine; i += 10 ) {
+        this._ctx.arc(LineTwoX, i, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
+      //пунктирная рамка- обводка - нижняя линия
+      var LineThreeY = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+      var LineThreeStartX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth/2;
+
+       this._ctx.beginPath();
+      for (var i = LineThreeStartX; i <= LineThreeStartX + lengthLine; i += 10 ) {
+        this._ctx.arc(i, LineThreeY, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
+      //пунктирная рамка- обводка - левая линия
+      var LineFourX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+      var LineFourStartY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+
+       this._ctx.beginPath();
+      for (var i = LineFourStartY; i <= LineFourStartY + lengthLine; i += 10 ) {
+        this._ctx.arc(LineFourX, i, 3, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
+
+     /**
+       * рамка- ёлочкой
+       */
+
+    this._ctx.setLineDash([5, 0]);
+    this._ctx.beginPath();
+    this._ctx.moveTo(
+          (-this._resizeConstraint.side / 2),
+          (-this._resizeConstraint.side / 2));
+
+      for (var i = -this._resizeConstraint.side / 2; i <= -this._resizeConstraint.side / 2 + lengthLine; i += 15 ) {
+         this._ctx.lineTo(i, -this._resizeConstraint.side / 2+15);
+         this._ctx.lineTo(i+= 15, -this._resizeConstraint.side / 2);
+      }
+
+    this._ctx.stroke();
+  // }
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
       // следующий кадр рисовался с привычной системой координат, где точка
@@ -158,32 +244,7 @@
       // некорректно сработает даже очистка холста или нужно будет использовать
       // сложные рассчеты для координат прямоугольника, который нужно очистить.
       this._ctx.restore();
-
-     function drawLine(start, length, fillStyle) {
-        // Сохраним старое значение this._ctx.fillStyle
-        var oldFillStyle = 'rgba(0, 0, 0, 0.8)';
-        this._ctx.fillStyle = fillStyle;
-        var y = (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2;
-
-        for (var x = start; x < start + length; x += 10) {
-          this._ctx.arc(x, y, 4, 0, 2 * Math.PI);
-          this._ctx.fill();
-        }
-        // Вернем старое значение this._ctx.fillStyle, которое мы сохраняли ранее
-        this._ctx.fillStyle = oldFillStyle;
-      };
-
-      drawLine(
-        -((this._container.width - this._resizeConstraint.side) / 2),
-        this._resizeConstraint.side,
-        '#ffe753');
-
-
     },
-
-
-
-
 
     /**
      * Включение режима перемещения. Запоминается текущее положение курсора,
