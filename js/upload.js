@@ -103,11 +103,6 @@
    */
   var uploadMessage = document.querySelector('.upload-message');
 
-  /**
-   * @param {Action} action
-   * @param {string=} message
-   * @return {Element}
-   */
   function showMessage(action, message) {
     var isError = false;
 
