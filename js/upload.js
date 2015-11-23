@@ -24,6 +24,7 @@
   };
 
   /**
+    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * из ключей FileType.
    * @type {RegExp}
@@ -67,18 +68,6 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
-  /**
-   * Проверяет, валидны ли данные, в форме кадрирования.
-   * @return {boolean}
-   */
-  function resizeFormIsValid() {
-    return true;
-  }
-
-  /**
-   * Форма загрузки изображения.
-   * @type {HTMLFormElement}
-   */
   var uploadForm = document.forms['upload-select-image'];
 
   /**
@@ -86,7 +75,23 @@
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+  var resizeFormX = resizeForm['resize-x'];
+  var resizeFormY = resizeForm['resize-y'];
+  var resizeFormSade = resizeForm['resize-size'];
 
+  /**
+ * Проверяет, валидны ли данные, в форме кадрирования.
+ * @return {boolean}
+ */
+  function resizeFormIsValid() {
+    if (+resizeFormX.value + +resizeFormSade.value <= currentResizer._image.naturalWidth &&
+        resizeFormY.value + +resizeFormSade.value <= currentResizer._image.naturalHeight) {
+      resizeForm['resize-fwd'].removeAttribute('disabled');
+      return true;
+    } else {
+      resizeForm['resize-fwd'].disabled = 'disabled';
+    }
+  }
   /**
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
@@ -103,6 +108,11 @@
    */
   var uploadMessage = document.querySelector('.upload-message');
 
+  /**
+   * @param {Action} action
+   * @param {string=} message
+   * @return {Element}
+   */
   function showMessage(action, message) {
     var isError = false;
 
@@ -146,7 +156,6 @@
 
         fileReader.onload = function() {
           cleanupResizer();
-
           currentResizer = new Resizer(fileReader.result);
           currentResizer.setElement(resizeForm);
           uploadMessage.classList.add('invisible');
@@ -215,10 +224,8 @@
    */
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-
     cleanupResizer();
     updateBackground();
-
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
@@ -252,3 +259,4 @@
   cleanupResizer();
   updateBackground();
 })();
+
