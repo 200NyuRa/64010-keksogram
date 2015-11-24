@@ -119,6 +119,38 @@
           this._resizeConstraint.side - this._ctx.lineWidth / 2,
           this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
+      /**
+       * Отрисовка маски, прозрачностью 80% вокруг желтой рамки,
+       */
+      this._ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+
+      //верхний четырехугольник
+      this._ctx.fillRect(
+          -this._container.width / 2,
+          -this._container.height / 2 - this._ctx.lineWidth,
+          this._container.width,
+          (this._container.height - this._resizeConstraint.side) / 2);
+
+      //нижний четырехугольник
+      this._ctx.fillRect(
+          -this._container.width / 2,
+          this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+          this._container.width,
+          this._container.height);
+
+      //правый четырехугольник
+      this._ctx.fillRect(
+          this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2,
+          -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+          this._container.width,
+          this._resizeConstraint.side + this._ctx.lineWidth / 2);
+
+      //левый четырехугольник
+      this._ctx.fillRect(
+        -this._container.width / 2,
+        -this._resizeConstraint.side / 2 - this._ctx.lineWidth,
+        (this._container.width - this._resizeConstraint.side) / 2 - this._ctx.lineWidth,
+        this._resizeConstraint.side + this._ctx.lineWidth / 2);
 
           this._ctx.beginPath();
               this._ctx.fillStyle = "rgba(0, 0, 0, 0.80)";
@@ -143,6 +175,82 @@
       //   (-this._resizeConstraint.side / 2) - this._ctx.lineWidth,
       //   this._resizeConstraint.side + this._ctx.lineWidth / 2,
       //   this._resizeConstraint.side + this._ctx.lineWidth / 2);
+      /**
+       * вывод размеров кадрируемого изображения
+       */
+      var SizeText = this._image.naturalWidth + ' х ' + this._image.naturalHeight;
+      var SizeTextX = 0;
+      var SizeTextY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+
+      //стили текста
+      this._ctx.fillStyle = '#fff';
+      this._ctx.font = 'normal 16px Arial';
+      this._ctx.textBaseline = 'bottom';
+      this._ctx.textAlign = 'center';
+      this._ctx.fillText(SizeText, SizeTextX, SizeTextY);
+
+      // /**
+      //  * пунктирная рамка- обводка для картинки
+      //  */
+      // this._ctx.fillStyle = '#ffe753';
+
+      // // отнимаем от длины рамки половину суммы шага и диаметра окружностей
+      // var lengthLine = this._resizeConstraint.side - 8;
+
+      // //пунктирная рамка- обводка - верхняя линия
+      // var LineFirstStartX = -this._resizeConstraint.side / 2 + 8;
+      // var LineFirstY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+
+      // this._ctx.beginPath();
+      // for (var i = LineFirstStartX; i <= LineFirstStartX + lengthLine; i += 12 ) {
+      //   this._ctx.arc(i, LineFirstY, 4, 0, Math.PI * 2);
+      //   this._ctx.fill();
+      // }
+
+      // //пунктирная рамка- обводка - правая линия
+      // var LineTwoX = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+      // var LineTwoStartY = -this._resizeConstraint.side / 2 + 8;
+
+      // this._ctx.beginPath();
+      // for (var a = LineTwoStartY; a <= LineTwoStartY + lengthLine; a += 12) {
+      //   this._ctx.arc(LineTwoX, a, 4, 0, Math.PI * 2);
+      //   this._ctx.fill();
+      // }
+
+      // //пунктирная рамка- обводка - нижняя линия
+      // var LineThreeY = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+      // var LineThreeStartX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+
+      // this._ctx.beginPath();
+      // for (var b = LineThreeStartX; b <= LineThreeStartX + lengthLine; b += 12 ) {
+      //   this._ctx.arc(b, LineThreeY, 4, 0, Math.PI * 2);
+      //   this._ctx.fill();
+      // }
+
+      // //пунктирная рамка- обводка - левая линия
+      // var LineFourX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+      // var LineFourStartY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+
+      // this._ctx.beginPath();
+      // for (var c = LineFourStartY; c <= LineFourStartY + lengthLine; c += 12 ) {
+      //   this._ctx.arc(LineFourX, c, 4, 0, Math.PI * 2);
+      //   this._ctx.fill();
+      // }
+
+     /**
+       * рамка- ёлочкой
+       */
+      // this._ctx.setLineDash([5, 0]);
+      // this._ctx.beginPath();
+      // this._ctx.moveTo(
+      //     (-this._resizeConstraint.side / 2),
+      //     (-this._resizeConstraint.side / 2));
+
+      // for (var j = -this._resizeConstraint.side / 2; j <= -this._resizeConstraint.side / 2 + lengthLine; j += 15) {
+      //   this._ctx.lineTo(j, -this._resizeConstraint.side / 2 + 15);
+      //   this._ctx.lineTo(j += 15, -this._resizeConstraint.side / 2);
+      // }
+      // this._ctx.stroke();
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
