@@ -77,16 +77,16 @@
   var resizeForm = document.forms['upload-resize'];
   var resizeFormX = resizeForm['resize-x'];
   var resizeFormY = resizeForm['resize-y'];
-  var resizeFormSade = resizeForm['resize-size'];
+  var resizeFormSide = resizeForm['resize-size'];
 
   /**
  * Проверяет, валидны ли данные, в форме кадрирования.
  * @return {boolean}
  */
   function resizeFormIsValid() {
-    if (+resizeFormX.value + +resizeFormSade.value <= currentResizer._image.naturalWidth &&
-        resizeFormY.value + +resizeFormSade.value <= currentResizer._image.naturalHeight &&
-        +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSade.value > 0 ) {
+    if (+resizeFormX.value + +resizeFormiade.value <= currentResizer._image.naturalWidth &&
+        resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
+        +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0 ) {
       return true;
     } else {
       return false;
