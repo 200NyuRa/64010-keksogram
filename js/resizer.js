@@ -113,11 +113,11 @@
 
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      // this._ctx.strokeRect(
+      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //     this._resizeConstraint.side - this._ctx.lineWidth / 2,
+      //     this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
       /**
        * Отрисовка маски, прозрачностью 80% вокруг желтой рамки,
@@ -152,29 +152,6 @@
         (this._container.width - this._resizeConstraint.side) / 2 - this._ctx.lineWidth,
         this._resizeConstraint.side + this._ctx.lineWidth / 2);
 
-          this._ctx.beginPath();
-              this._ctx.fillStyle = "rgba(0, 0, 0, 0.80)";
-               this._ctx.rect(50, 50, 60, 80, true);
-              // this._ctx.rect(
-              // (-this._container.width / 2),
-              // (-this._container.height / 2),
-              // this._container.width,
-              // this._container.height,);
-          this._ctx.fill();
-
-
-
-      // this._ctx.fillStyle = "rgba(0, 0, 0, 0.80)";
-      // this._ctx.fillRect (
-      //   (-this._container.width / 2),
-      //   (-this._container.height / 2),
-      //   this._container.width,
-      //   this._container.height);
-      // this._ctx.clearRect(
-      //   (-this._resizeConstraint.side / 2) - this._ctx.lineWidth,
-      //   (-this._resizeConstraint.side / 2) - this._ctx.lineWidth,
-      //   this._resizeConstraint.side + this._ctx.lineWidth / 2,
-      //   this._resizeConstraint.side + this._ctx.lineWidth / 2);
       /**
        * вывод размеров кадрируемого изображения
        */
@@ -192,50 +169,50 @@
       // /**
       //  * пунктирная рамка- обводка для картинки
       //  */
-      // this._ctx.fillStyle = '#ffe753';
+      this._ctx.fillStyle = '#ffe753';
 
-      // // отнимаем от длины рамки половину суммы шага и диаметра окружностей
-      // var lengthLine = this._resizeConstraint.side - 8;
+      // отнимаем от длины рамки половину суммы шага и диаметра окружностей
+      var lengthLine = this._resizeConstraint.side - 8;
 
-      // //пунктирная рамка- обводка - верхняя линия
-      // var LineFirstStartX = -this._resizeConstraint.side / 2 + 8;
-      // var LineFirstY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+      //пунктирная рамка- обводка - верхняя линия
+      var LineFirstStartX = -this._resizeConstraint.side / 2 + 8;
+      var LineFirstY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
 
-      // this._ctx.beginPath();
-      // for (var i = LineFirstStartX; i <= LineFirstStartX + lengthLine; i += 12 ) {
-      //   this._ctx.arc(i, LineFirstY, 4, 0, Math.PI * 2);
-      //   this._ctx.fill();
-      // }
+      this._ctx.beginPath();
+      for (var i = LineFirstStartX; i <= LineFirstStartX + lengthLine; i += 12 ) {
+        this._ctx.arc(i, LineFirstY, 4, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
-      // //пунктирная рамка- обводка - правая линия
-      // var LineTwoX = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
-      // var LineTwoStartY = -this._resizeConstraint.side / 2 + 8;
+      //пунктирная рамка- обводка - правая линия
+      var LineTwoX = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+      var LineTwoStartY = -this._resizeConstraint.side / 2 + 8;
 
-      // this._ctx.beginPath();
-      // for (var a = LineTwoStartY; a <= LineTwoStartY + lengthLine; a += 12) {
-      //   this._ctx.arc(LineTwoX, a, 4, 0, Math.PI * 2);
-      //   this._ctx.fill();
-      // }
+      this._ctx.beginPath();
+      for (var a = LineTwoStartY; a <= LineTwoStartY + lengthLine; a += 12) {
+        this._ctx.arc(LineTwoX, a, 4, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
-      // //пунктирная рамка- обводка - нижняя линия
-      // var LineThreeY = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
-      // var LineThreeStartX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+      //пунктирная рамка- обводка - нижняя линия
+      var LineThreeY = this._resizeConstraint.side / 2 - this._ctx.lineWidth;
+      var LineThreeStartX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
 
-      // this._ctx.beginPath();
-      // for (var b = LineThreeStartX; b <= LineThreeStartX + lengthLine; b += 12 ) {
-      //   this._ctx.arc(b, LineThreeY, 4, 0, Math.PI * 2);
-      //   this._ctx.fill();
-      // }
+      this._ctx.beginPath();
+      for (var b = LineThreeStartX; b <= LineThreeStartX + lengthLine; b += 12 ) {
+        this._ctx.arc(b, LineThreeY, 4, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
-      // //пунктирная рамка- обводка - левая линия
-      // var LineFourX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
-      // var LineFourStartY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+      //пунктирная рамка- обводка - левая линия
+      var LineFourX = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
+      var LineFourStartY = -this._resizeConstraint.side / 2 - this._ctx.lineWidth / 2;
 
-      // this._ctx.beginPath();
-      // for (var c = LineFourStartY; c <= LineFourStartY + lengthLine; c += 12 ) {
-      //   this._ctx.arc(LineFourX, c, 4, 0, Math.PI * 2);
-      //   this._ctx.fill();
-      // }
+      this._ctx.beginPath();
+      for (var c = LineFourStartY; c <= LineFourStartY + lengthLine; c += 12 ) {
+        this._ctx.arc(LineFourX, c, 4, 0, Math.PI * 2);
+        this._ctx.fill();
+      }
 
      /**
        * рамка- ёлочкой

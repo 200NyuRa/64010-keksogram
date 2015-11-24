@@ -85,11 +85,11 @@
  */
   function resizeFormIsValid() {
     if (+resizeFormX.value + +resizeFormSade.value <= currentResizer._image.naturalWidth &&
-        resizeFormY.value + +resizeFormSade.value <= currentResizer._image.naturalHeight) {
-      resizeForm['resize-fwd'].removeAttribute('disabled');
+        resizeFormY.value + +resizeFormSade.value <= currentResizer._image.naturalHeight &&
+        +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSade.value > 0 ) {
       return true;
     } else {
-      resizeForm['resize-fwd'].disabled = 'disabled';
+      return false;
     }
   }
   /**
