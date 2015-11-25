@@ -85,28 +85,43 @@
  */
   function resizeFormIsValid() {
     if (+resizeFormX.value + +resizeFormSade.value <= currentResizer._image.naturalWidth &&
-        resizeFormY.value + +resizeFormSade.value <= currentResizer._image.naturalHeight &&
+        +resizeFormY.value + +resizeFormSade.value <= currentResizer._image.naturalHeight &&
         +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSade.value > 0 ) {
       return true;
     } else {
       return false;
     }
   }
+
   /**
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
    */
-
   var filterForm = document.forms['upload-filter'];
   var filterFormItem = document.querySelectorAll( '[name = "upload-filter"]' );
   var DateToExpire = +Date.now() + 305 * 24 * 60 * 60 * 1000;
   var formattedDateToExpire = new Date(DateToExpire).toUTCString();
 
+  /**
+   * Сохраняет значения полей формы добавления фильтра в cookie
+   * @type {HTMLFormElement}
+   */
   function filterFormChecked() {
     for (var i = 0; i <= filterFormItem.length - 1; i++) {
-      document.cookie = filterFormItem[i].value + '=' + filterFormItem[i].checked + ';expires=' + 'Sun, 25 Sep 2016 05:16:36 GMT';
+      document.cookie = filterFormItem[i].value + '=' + filterFormItem[i].checked + ';expires=' + formattedDateToExpire;
     }
   }
+
+  /**
+   *Получает значения полей формы добавления фильтра, записанные в cookie
+   */
+  function filterFormValue() {
+    for (var i = 0; i <= filterFormItem.length - 1; i++) {
+      filterFormItem[i].checked = docCookies.getItem(filterFormItem[i].value);
+    }
+  }
+
+  filterFormValue();
 
   /**
    * @type {HTMLImageElement}
@@ -206,14 +221,10 @@
    * @param {Event} evt
    */
 
-
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
-
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
-
-
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
