@@ -96,7 +96,17 @@
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
    */
+
   var filterForm = document.forms['upload-filter'];
+  var filterFormItem = document.querySelectorAll( '[name = "upload-filter"]' );
+  var DateToExpire = +Date.now() + 305 * 24 * 60 * 60 * 1000;
+  var formattedDateToExpire = new Date(DateToExpire).toUTCString();
+
+  function filterFormChecked() {
+    for (var i = 0; i <= filterFormItem.length - 1; i++) {
+      document.cookie = filterFormItem[i].value + '=' + filterFormItem[i].checked + ';expires=' + 'Sun, 25 Sep 2016 05:16:36 GMT';
+    }
+  }
 
   /**
    * @type {HTMLImageElement}
@@ -195,11 +205,14 @@
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
+
+
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
+
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
@@ -212,7 +225,6 @@
    */
   filterForm.onreset = function(evt) {
     evt.preventDefault();
-
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
   };
@@ -225,6 +237,7 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
     cleanupResizer();
+    filterFormChecked();
     updateBackground();
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
@@ -249,6 +262,8 @@
     var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
       return item.checked;
     })[0].value;
+
+
 
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
