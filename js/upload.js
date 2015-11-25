@@ -84,8 +84,8 @@
  * @return {boolean}
  */
   function resizeFormIsValid() {
-    if (+resizeFormX.value + +resizeFormiade.value <= currentResizer._image.naturalWidth &&
-        resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
+    if (+resizeFormX.value + +resizeFormSide.value <= currentResizer._image.naturalWidth &&
+        +resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
         +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0 ) {
       return true;
     } else {
