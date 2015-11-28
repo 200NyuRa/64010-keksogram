@@ -24,6 +24,7 @@
   };
 
   /**
+    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * из ключей FileType.
    * @type {RegExp}
@@ -67,18 +68,6 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
-  /**
-   * Проверяет, валидны ли данные, в форме кадрирования.
-   * @return {boolean}
-   */
-  function resizeFormIsValid() {
-    return true;
-  }
-
-  /**
-   * Форма загрузки изображения.
-   * @type {HTMLFormElement}
-   */
   var uploadForm = document.forms['upload-select-image'];
 
   /**
@@ -86,12 +75,50 @@
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+  var resizeFormX = resizeForm['resize-x'];
+  var resizeFormY = resizeForm['resize-y'];
+  var resizeFormSide = resizeForm['resize-size'];
 
+  /**
+ * Проверяет, валидны ли данные, в форме кадрирования.
+ * @return {boolean}
+ */
+  function resizeFormIsValid() {
+    return +resizeFormX.value + +resizeFormSide.value <= currentResizer._image.naturalWidth &&
+           +resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
+           +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0;
+  }
   /**
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
    */
   var filterForm = document.forms['upload-filter'];
+  var filterFormItem = document.querySelectorAll( '[name = "upload-filter"]' );
+
+  var latestBirthday = new Date(2015, 0, 23);
+  var lastDayBirthday = +Date.now() - latestBirthday;
+  var dateToExpire = +Date.now() + lastDayBirthday;
+  var formattedDateToExpire = new Date(dateToExpire).toUTCString();
+
+  function filterFormChecked() {
+    for (var i = 0; i < filterFormItem.length; i++) {
+      if (filterFormItem[i].checked) {
+        docCookies.setItem(filterFormItem[i].value, true, formattedDateToExpire);
+      }else {
+        docCookies.removeItem(filterFormItem[i].value, true);
+        docCookies.removeItem(filterFormItem[i].value, false);
+      }
+    }
+  }
+
+  function filterFormValue() {
+    for (var i = 0; i <= filterFormItem.length - 1; i++) {
+      filterFormItem[i].checked = docCookies.getItem(filterFormItem[i].value);
+    }
+  }
+
+  filterFormValue();
+
 
   /**
    * @type {HTMLImageElement}
@@ -151,7 +178,6 @@
 
         fileReader.onload = function() {
           cleanupResizer();
-
           currentResizer = new Resizer(fileReader.result);
           currentResizer.setElement(resizeForm);
           uploadMessage.classList.add('invisible');
@@ -220,10 +246,9 @@
    */
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-
     cleanupResizer();
     updateBackground();
-
+    filterFormChecked();
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
