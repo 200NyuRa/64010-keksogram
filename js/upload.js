@@ -99,8 +99,13 @@
    */
   var filterForm = document.forms['upload-filter'];
   var filterFormItem = document.querySelectorAll( '[name = "upload-filter"]' );
-  var DateToExpire = +Date.now() + 305 * 24 * 60 * 60 * 1000;
-  var formattedDateToExpire = new Date(DateToExpire).toUTCString();
+
+
+  var latestBirthday = new Date(2015, 0, 23);
+
+  var lastDayBirthday = +Date.now() - latestBirthday;
+  var dateToExpire = +Date.now() + lastDayBirthday;
+  var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
   /**
    * Сохраняет значения полей формы добавления фильтра в cookie
