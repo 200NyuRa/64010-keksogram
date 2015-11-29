@@ -24,6 +24,7 @@
   };
 
   /**
+    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * Регулярное выражение, проверяющее тип загружаемого файла. Составляется
    * из ключей FileType.
    * @type {RegExp}
@@ -67,18 +68,6 @@
     backgroundElement.style.backgroundImage = 'url(' + images[randomImageNumber] + ')';
   }
 
-  /**
-   * Проверяет, валидны ли данные, в форме кадрирования.
-   * @return {boolean}
-   */
-  function resizeFormIsValid() {
-    return true;
-  }
-
-  /**
-   * Форма загрузки изображения.
-   * @type {HTMLFormElement}
-   */
   var uploadForm = document.forms['upload-select-image'];
 
   /**
@@ -86,7 +75,23 @@
    * @type {HTMLFormElement}
    */
   var resizeForm = document.forms['upload-resize'];
+  var resizeFormX = resizeForm['resize-x'];
+  var resizeFormY = resizeForm['resize-y'];
+  var resizeFormSide = resizeForm['resize-size'];
 
+  /**
+ * Проверяет, валидны ли данные, в форме кадрирования.
+ * @return {boolean}
+ */
+  function resizeFormIsValid() {
+    if (+resizeFormX.value + +resizeFormSide.value <= currentResizer._image.naturalWidth &&
+        +resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
+        +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0 ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   /**
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
@@ -151,7 +156,6 @@
 
         fileReader.onload = function() {
           cleanupResizer();
-
           currentResizer = new Resizer(fileReader.result);
           currentResizer.setElement(resizeForm);
           uploadMessage.classList.add('invisible');
@@ -220,10 +224,8 @@
    */
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-
     cleanupResizer();
     updateBackground();
-
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
@@ -257,3 +259,4 @@
   cleanupResizer();
   updateBackground();
 })();
+
