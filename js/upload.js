@@ -84,13 +84,9 @@
  * @return {boolean}
  */
   function resizeFormIsValid() {
-    if (+resizeFormX.value + +resizeFormSide.value <= currentResizer._image.naturalWidth &&
-        +resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
-        +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0 ) {
-      return true;
-    } else {
-      return false;
-    }
+    return +resizeFormX.value + +resizeFormSide.value <= currentResizer._image.naturalWidth &&
+           +resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
+           +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0;
   }
 
   /**
@@ -100,9 +96,7 @@
   var filterForm = document.forms['upload-filter'];
   var filterFormItem = document.querySelectorAll( '[name = "upload-filter"]' );
 
-
   var latestBirthday = new Date(2015, 0, 23);
-
   var lastDayBirthday = +Date.now() - latestBirthday;
   var dateToExpire = +Date.now() + lastDayBirthday;
   var formattedDateToExpire = new Date(dateToExpire).toUTCString();
@@ -112,18 +106,18 @@
    * @type {HTMLFormElement}
    */
   function filterFormChecked() {
-    for (var i = 0; i <= filterFormItem.length - 1; i++) {
-      document.cookie = filterFormItem[i].value + '=' + filterFormItem[i].checked + ';expires=' + formattedDateToExpire;
+    for (var i = 0; i < filterFormItem.length; i++) {
+      if (filterFormItem[i].checked) {
+        docCookies.setItem('filter', filterFormItem[i].value, formattedDateToExpire);
+        docCookies.hasItem('filter');
+      }
     }
   }
 
-  /**
-   *Получает значения полей формы добавления фильтра, записанные в cookie
-   */
   function filterFormValue() {
-    for (var i = 0; i <= filterFormItem.length - 1; i++) {
-      filterFormItem[i].checked = docCookies.getItem(filterFormItem[i].value);
-    }
+      var result = docCookies.getItem('filter');
+      console.log (result);
+      var Selector = document.querySelector('[value = result]');
   }
 
   filterFormValue();
@@ -289,5 +283,4 @@
 
   cleanupResizer();
   updateBackground();
-})();
-
+  })();
