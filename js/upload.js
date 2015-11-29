@@ -88,7 +88,6 @@
            +resizeFormY.value + +resizeFormSide.value <= currentResizer._image.naturalHeight &&
            +resizeFormX.value > 0 && +resizeFormY.value > 0 && resizeFormSide.value > 0;
   }
-
   /**
    * Форма добавления фильтра.
    * @type {HTMLFormElement}
@@ -101,26 +100,25 @@
   var dateToExpire = +Date.now() + lastDayBirthday;
   var formattedDateToExpire = new Date(dateToExpire).toUTCString();
 
-  /**
-   * Сохраняет значения полей формы добавления фильтра в cookie
-   * @type {HTMLFormElement}
-   */
   function filterFormChecked() {
     for (var i = 0; i < filterFormItem.length; i++) {
       if (filterFormItem[i].checked) {
-        docCookies.setItem('filter', filterFormItem[i].value, formattedDateToExpire);
-        docCookies.hasItem('filter');
+        docCookies.setItem(filterFormItem[i].value, true, formattedDateToExpire);
+      }else {
+        docCookies.removeItem(filterFormItem[i].value, true);
+        docCookies.removeItem(filterFormItem[i].value, false);
       }
     }
   }
 
   function filterFormValue() {
-      var result = docCookies.getItem('filter');
-      console.log (result);
-      var Selector = document.querySelector('[value = result]');
+    for (var i = 0; i <= filterFormItem.length - 1; i++) {
+      filterFormItem[i].checked = docCookies.getItem(filterFormItem[i].value);
+    }
   }
 
   filterFormValue();
+
 
   /**
    * @type {HTMLImageElement}
@@ -219,11 +217,12 @@
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-
   resizeForm.onsubmit = function(evt) {
     evt.preventDefault();
+
     if (resizeFormIsValid()) {
       filterImage.src = currentResizer.exportImage().src;
+
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
@@ -235,6 +234,7 @@
    */
   filterForm.onreset = function(evt) {
     evt.preventDefault();
+
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
   };
@@ -247,8 +247,8 @@
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
     cleanupResizer();
-    filterFormChecked();
     updateBackground();
+    filterFormChecked();
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
   };
@@ -273,8 +273,6 @@
       return item.checked;
     })[0].value;
 
-
-
     // Класс перезаписывается, а не обновляется через classList потому что нужно
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
@@ -283,4 +281,4 @@
 
   cleanupResizer();
   updateBackground();
-  })();
+})();
