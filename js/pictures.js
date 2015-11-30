@@ -4,8 +4,10 @@
   var container = document.querySelector('.pictures');
 
   //Проходит по массиву файле data/pictures.js,  вставляет
-  //созданные элементы (количество элементов равно количеству элементов в массиве)
-  //в конец контейнера .pictures
+  //созданные элементы в конец контейнера .pictures
+  //(количество добавленных элементов равно количеству элементов в массиве)
+
+  var pictures = [];
 
   pictures.forEach(function(picture) {
     var element = getElementFormTemplate(picture);
@@ -19,7 +21,7 @@
     if ('content' in template) {
       var element = template.content.firstElementChild.cloneNode(true);
     } else {
-      var element = template.firstElementChild.cloneNode(true);
+      element = template.firstElementChild.cloneNode(true);
     }
 
     element.querySelector('.picture-comments').textContent = data.comments;
@@ -30,7 +32,7 @@
     var InnerPicture = element.querySelector('img');
 
    //если изображение не загружается в течении 10 с,
-   //прекращает загрузку
+   //прекращает загрузку изображения
     var TimeuotLoadImage = setTimeout(function() {
       backgroundImage.src = '';
       element.classList.add('picture-load-failure');
@@ -64,5 +66,4 @@
   }
 
   controlClassFormFilters();
-
 })();
