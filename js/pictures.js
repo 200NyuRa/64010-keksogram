@@ -7,8 +7,6 @@
   //созданные элементы в конец контейнера .pictures
   //(количество добавленных элементов равно количеству элементов в массиве)
 
-  var pictures = [];
-
   pictures.forEach(function(picture) {
     var element = getElementFormTemplate(picture);
     container.appendChild(element);
