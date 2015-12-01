@@ -1,12 +1,18 @@
 'use strict';
 
 (function() {
+  /* global pictures: true */
+  function hiddenFormFilters() {
+    var formFilters = document.forms[0];
+    formFilters.classList.add('hidden');
+  }
+  hiddenFormFilters();
+
   var container = document.querySelector('.pictures');
 
   //Проходит по массиву файле data/pictures.js,  вставляет
   //созданные элементы в конец контейнера .pictures
   //(количество добавленных элементов равно количеству элементов в массиве)
-
   pictures.forEach(function(picture) {
     var element = getElementFormTemplate(picture);
     container.appendChild(element);
@@ -27,11 +33,11 @@
 
     // создает изображение с помощью  объекта new Image()
     var backgroundImage = new Image();
-    var InnerPicture = element.querySelector('img');
+    var innerPicture = element.querySelector('img');
 
    //если изображение не загружается в течении 10 с,
    //прекращает загрузку изображения
-    var TimeuotLoadImage = setTimeout(function() {
+    var timeuotLoadImage = setTimeout(function() {
       backgroundImage.src = '';
       element.classList.add('picture-load-failure');
     }, 10000);
@@ -41,10 +47,11 @@
     //если изображение по прошествии 10 секунд загружается, отменяет
     //таймаут незагрузки изображения TimeuotLoadImage
     backgroundImage.onload = function() {
-      clearTimeout(TimeuotLoadImage);
+      clearTimeout(timeuotLoadImage);
       backgroundImage.width = 182;
       backgroundImage.height = 182;
-      element.replaceChild(backgroundImage, InnerPicture);
+      element.replaceChild(backgroundImage, innerPicture);
+      visibleFormFilters();
     };
 
     //обработчик ошибки загрузки изображения
@@ -58,10 +65,10 @@
   }
 
   //Отображает блок с фильтрами
-  function controlClassFormFilters() {
-    var FormFilters = document.forms[0];
-    FormFilters.classList.remove('hidden');
+  function visibleFormFilters() {
+    var formFilters = document.forms[0];
+    formFilters.classList.remove('hidden');
   }
 
-  controlClassFormFilters();
+
 })();
