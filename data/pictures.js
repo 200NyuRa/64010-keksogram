@@ -25,7 +25,7 @@ var pictures = [{
 }, {
   "likes": 356,
   "comments": 9,
-  "url": "failed.jpg"
+  "url": "picture/7.jpg"
 }, {
   "likes": 242,
   "comments": 39,
