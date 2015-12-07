@@ -1,22 +1,13 @@
 'use strict';
 
 (function() {
-
+  var container = document.querySelector('.pictures');
+  var formFilters = document.forms[0];
   function hiddenFormFilters() {
-    var formFilters = document.forms[0];
     formFilters.classList.add('hidden');
   }
+
   hiddenFormFilters();
-
-  var container = document.querySelector('.pictures');
-
-  //Проходит по массиву файле data/pictures.js,  вставляет
-  //созданные элементы в конец контейнера .pictures
-  //(количество добавленных элементов равно количеству элементов в массиве)
-  pictures.forEach(function(picture) {
-    var element = getElementFormTemplate(picture);
-    container.appendChild(element);
-  });
 
   //для каждого элементвы создает DOM - элемент на основе шаблона
   function getElementFormTemplate(data) {
@@ -64,11 +55,125 @@
     return element;
   }
 
-  //Отображает блок с фильтрами
-  function visibleFormFilters() {
-    var formFilters = document.forms[0];
-    formFilters.classList.remove('hidden');
+  /**
+   * Загрузка списка с фотографиями
+   */
+  function getPicture() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'data/pictures.json');
+    xhr.timeout = 10000;
+
+    //пока длится загрузка файла, отображается прелоадер
+    container.classList.add('pictures-loading');
+
+    xhr.onload = function(evt) {
+      var rawData = evt.target.response;
+      var loadPictures = JSON.parse(rawData);
+      uploadPicture(loadPictures);
+      container.classList.remove('pictures-loading');
+    };
+
+    //функция ошибка при загрузке
+    var getError = function() {
+      // Убираем прелоадер, если есть.
+      if (container.classList.contains('pictures-loading')) {
+        container.classList.remove('pictures-loading');
+      }
+      container.classList.add('pictures-failure');
+    };
+
+    xhr.onerror = getError;
+    xhr.ontimeout = getError;
+
+    xhr.send();
   }
 
+
+  getPicture();
+
+  //выводит фотографии на экран
+  function renderPictures(pictures) {
+    container.innerHTML = '';
+    pictures.forEach(function(picture) {
+      var element = getElementFormTemplate(picture);
+      container.appendChild(element);
+    });
+  }
+
+
+//Фильтрация фотографий
+
+  var formFilterPicture = document.querySelectorAll('.filters-radio');
+
+  var pictureList = [];
+  var activeFilter = 'filter-popular';
+
+  for (var i = 0; i < formFilterPicture.length; i++ ) {
+    formFilterPicture[i].onclick = function(evt) {
+      var clickElementID = evt.target.id;
+      setActiveFilterPicture(clickElementID);
+    };
+  }
+
+  //установка выбранного фильтра
+  function setActiveFilterPicture(id, force) {
+    if (activeFilter === id && !force) {
+      return;
+    }
+
+    //копирование массива с отелями
+    var pictureListFiltered = pictureList.slice(0);
+    switch (id) {
+      case 'filter-new':
+         //сортировка списока фотографий, сделанных за последние три месяца,
+         //отсортированных по убыванию даты (поле date)
+
+        // сначала отсортируем фоторгафии  по убыванию даты
+        pictureListFiltered = pictureList.sort(function(a, b) {
+          var dateB = new Date(b.date);
+          var dateA = new Date(a.date);
+          return dateB - dateA;
+        });
+
+        //фильтрация фотографий, сделанных за последние три месяца
+        pictureListFiltered = pictureListFiltered.filter(function(dateItem) {
+
+          //фотография с самой поздней датой - первый элемент в массиве pictureListFiltered
+          var lasterPictureDate = new Date(pictureListFiltered[0].date);
+          //
+          var threeMonthsLaster = lasterPictureDate.setMonth(lasterPictureDate.getMonth() - 3);
+
+
+          dateItem = new Date(dateItem.date);
+
+          //уменьшаем дату фотографии сделанной позже всех на 3 месяца,
+          //сравним с полученной датой даты других фотографий в массиве,
+         // результат запишем в новый массив
+          return dateItem > threeMonthsLaster;
+        });
+        break;
+
+      case 'filter-discussed':
+        // сортировка списка фотографий по убыванию количества комментариев (поле comments)
+        pictureListFiltered = pictureList.sort(function(a, b) {
+          return b.comments - a.comments;
+        });
+        break;
+    }
+
+    renderPictures(pictureListFiltered);
+  }
+
+
+
+  function uploadPicture(loadPictures) {
+    pictureList = loadPictures;
+    setActiveFilterPicture(activeFilter, true);
+  }
+
+  //Отображает блок с фильтрами
+  function visibleFormFilters() {
+    formFilters.classList.remove('hidden');
+  }
 
 })();
