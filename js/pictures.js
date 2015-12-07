@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-  /* global pictures: true */
+
   function hiddenFormFilters() {
     var formFilters = document.forms[0];
     formFilters.classList.add('hidden');
