@@ -175,5 +175,4 @@
   function visibleFormFilters() {
     formFilters.classList.remove('hidden');
   }
-
 })();
