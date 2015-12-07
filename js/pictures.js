@@ -3,11 +3,7 @@
 (function() {
   var container = document.querySelector('.pictures');
   var formFilters = document.forms[0];
-  function hiddenFormFilters() {
-    formFilters.classList.add('hidden');
-  }
 
-  hiddenFormFilters();
 
   //для каждого элементвы создает DOM - элемент на основе шаблона
   function getElementFormTemplate(data) {
@@ -42,7 +38,6 @@
       backgroundImage.width = 182;
       backgroundImage.height = 182;
       element.replaceChild(backgroundImage, innerPicture);
-      visibleFormFilters();
     };
 
     //обработчик ошибки загрузки изображения
@@ -50,7 +45,7 @@
       element.classList.add('picture-load-failure');
     };
 
-    //дбасляет атребут - src к изображению new Image()
+    //добасляет атребут - src к изображению new Image()
     backgroundImage.src = data.url;
     return element;
   }
@@ -98,15 +93,18 @@
       var element = getElementFormTemplate(picture);
       container.appendChild(element);
     });
-  }
 
+    //Отображает блок с фильтрами
+    if (formFilters.classList.contains('hidden')) {
+      formFilters.classList.remove('hidden');
+    }
+  }
 
 //Фильтрация фотографий
 
   var formFilterPicture = document.querySelectorAll('.filters-radio');
 
   var pictureList = [];
-  var activeFilter = 'filter-popular';
 
   for (var i = 0; i < formFilterPicture.length; i++ ) {
     formFilterPicture[i].onclick = function(evt) {
@@ -116,63 +114,48 @@
   }
 
   //установка выбранного фильтра
-  function setActiveFilterPicture(id, force) {
-    if (activeFilter === id && !force) {
-      return;
-    }
+  function setActiveFilterPicture(id) {
 
-    //копирование массива с отелями
+    //копирование массива с картинками
     var pictureListFiltered = pictureList.slice(0);
+
     switch (id) {
       case 'filter-new':
-         //сортировка списока фотографий, сделанных за последние три месяца,
-         //отсортированных по убыванию даты (поле date)
-
-        // сначала отсортируем фоторгафии  по убыванию даты
-        pictureListFiltered = pictureList.sort(function(a, b) {
-          var dateB = new Date(b.date);
-          var dateA = new Date(a.date);
-          return dateB - dateA;
+        //фильтрация списока фотографий, в новый массив попадают фотографии,
+        // сделанные за последние три месяца
+        pictureListFiltered = pictureListFiltered.filter(function(Item) {
+          //уменьшаем сегодняшнюю дату на 3 месяца,
+          //в новый массив запишем фотографии сделанные позже полученной даты
+          var dateNow = new Date();
+          var threeMonthBefore = dateNow.setMonth(dateNow.getMonth() - 3);
+          var dateItem = new Date(Item.date);
+          return dateItem > threeMonthBefore;
         });
 
-        //фильтрация фотографий, сделанных за последние три месяца
-        pictureListFiltered = pictureListFiltered.filter(function(dateItem) {
-
-          //фотография с самой поздней датой - первый элемент в массиве pictureListFiltered
-          var lasterPictureDate = new Date(pictureListFiltered[0].date);
-          //
-          var threeMonthsLaster = lasterPictureDate.setMonth(lasterPictureDate.getMonth() - 3);
-
-
-          dateItem = new Date(dateItem.date);
-
-          //уменьшаем дату фотографии сделанной позже всех на 3 месяца,
-          //сравним с полученной датой даты других фотографий в массиве,
-         // результат запишем в новый массив
-          return dateItem > threeMonthsLaster;
+        //сортировка отфильторованных фотографий  по убыванию даты
+        pictureListFiltered = pictureListFiltered.sort(function(a, b) {
+          var dateA = new Date(a.date);
+          var dateB = new Date(b.date);
+          return dateB - dateA;
         });
         break;
 
       case 'filter-discussed':
         // сортировка списка фотографий по убыванию количества комментариев (поле comments)
-        pictureListFiltered = pictureList.sort(function(a, b) {
+        pictureListFiltered = pictureListFiltered.sort(function(a, b) {
           return b.comments - a.comments;
         });
         break;
+
+      case 'filter-popular':
+        pictureListFiltered;
     }
 
     renderPictures(pictureListFiltered);
   }
 
-
-
   function uploadPicture(loadPictures) {
     pictureList = loadPictures;
-    setActiveFilterPicture(activeFilter, true);
-  }
-
-  //Отображает блок с фильтрами
-  function visibleFormFilters() {
-    formFilters.classList.remove('hidden');
+    setActiveFilterPicture('filter-popular');
   }
 })();
