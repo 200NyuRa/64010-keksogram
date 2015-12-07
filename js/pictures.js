@@ -148,7 +148,7 @@
         break;
 
       case 'filter-popular':
-        pictureListFiltered;
+        pictureListFiltered = pictureList;
     }
 
     renderPictures(pictureListFiltered);
