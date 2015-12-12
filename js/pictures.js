@@ -6,7 +6,7 @@
   var pictureList = [];
   var pictureListFiltered = [];
   var currentPage = 0;
-  var PAGE_SIZE = 12;//константа обозначает,что на странице будет показанно по 12 отелейБ длz отрисовки списка постранично
+  var PAGE_SIZE = 12;//константа обозначает,что на странице будет показанно по 12 фотографмй для отрисовки списка постранично
 
   //для каждого элементвы создает DOM - элемент на основе шаблона
   function getElementFormTemplate(data) {
@@ -95,8 +95,8 @@
     }
 
     //переменные для отрисовки списка фотографий постранично
-    var from = pageNamber * PAGE_SIZE; // первый отель на новой отрисованной станице
-    var to = from + PAGE_SIZE; // последний отель на новой отрисованной странице
+    var from = pageNamber * PAGE_SIZE; // первое фото на новой отрисованной станице
+    var to = from + PAGE_SIZE; // последнее фото на новой отрисованной странице
     var pagePictures = pictures.slice(from, to); // массив для отрисовки n-ой страницы
 
 
@@ -111,18 +111,19 @@
     }
   }
 
+  function checkRenderPictures() {
+    if (container.getBoundingClientRect().bottom <= window.innerHeight) {
+      if (currentPage < Math.ceil(pictureListFiltered.length / PAGE_SIZE)) {
+        renderPictures(pictureListFiltered, ++currentPage);
+      }
+    }
+  }
+
   //отрисовка фотографий при скроле
   window.addEventListener('scroll', function() {
     var scrollTimeout;
     clearTimeout(scrollTimeout);
-
-    scrollTimeout = setTimeout(function() {
-      if (container.getBoundingClientRect().bottom <= window.innerHeight) {
-        if (currentPage < Math.ceil(pictureListFiltered.length / PAGE_SIZE)) {
-          renderPictures(pictureListFiltered, ++currentPage);
-        }
-      }
-    }, 100);
+    scrollTimeout = setTimeout(checkRenderPictures(), 100);
   });
 
 //Фильтрация фотографий
@@ -176,6 +177,7 @@
 
     currentPage = 0;
     renderPictures(pictureListFiltered, currentPage, true);
+    checkRenderPictures();
   }
 
   function uploadPicture(loadPictures) {
