@@ -281,4 +281,22 @@
 
   cleanupResizer();
   updateBackground();
+
+  //Обработчик события 'resizerchange',
+  //который берет значения смещения и размера кадра из объекта resizer и добавляет их в форму
+  window.addEventListener('resizerchange', function() {
+    resizeForm.elements.x.value = currentResizer.getConstraint().x;
+    resizeForm.elements.y.value = currentResizer.getConstraint().y;
+    resizeForm.elements.size.value = currentResizer.getConstraint().side;
+  });
+
+  //обработчик изменения полей формы. При изменении значений в форме, обновляется объект resizer
+  resizeForm.addEventListener('change', function() {
+    var a = +resizeForm.elements.x.value;
+    var b = +resizeForm.elements.y.value;
+    var c = +resizeForm.elements.size.value;
+
+    currentResizer.setConstraint(a, b, c);
+  });
+
 })();
